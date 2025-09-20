@@ -453,6 +453,30 @@
                 display: flex;
             }
         }
+
+        /* ================================ */
+        /* MOBILE OVERFLOW FIXES */
+        /* ================================ */
+        html, body {
+            overflow-x: hidden;
+            max-width: 100vw;
+        }
+
+        /* Custom width for image containers */
+        .w-206 {
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .lg\\:h-206 {
+            height: auto;
+        }
+
+        @media (min-width: 1024px) {
+            .lg\\:h-206 {
+                height: 400px;
+            }
+        }
     </style>
 </head>
 
@@ -561,7 +585,7 @@
                 </div>
                 <!-- Hero Illustration -->
                 <div class="flex-1 max-w-lg lg:max-w-2xl" data-aos="fade-left" data-aos-delay="250">
-                    <div class="w-206 h-auto lg:h-206 flex items-center justify-center">
+                    <div class="w-full max-w-md mx-auto lg:max-w-lg h-auto lg:h-96 flex items-center justify-center">
                         <img src="./img/img-1.png" 
                              alt="Professional web developer working on custom website design and development" 
                              loading="lazy"
@@ -619,7 +643,7 @@
             <div class="flex flex-col md:flex-row justify-between items-center gap-8 sm:gap-16">
                 <!-- Illustration: Woman presenting graph -->
                 <div class="w-full md:w-1/2 mb-8 md:mb-0 flex justify-center" data-aos="fade-right" data-aos-delay="250">
-                    <div class="w-206 h-auto rounded-2xl overflow-hidden">
+                    <div class="w-full max-w-md mx-auto h-auto rounded-2xl overflow-hidden">
                         <img src="./img/img-2.png" 
                              alt="Website performance and security analytics dashboard showing fast loading speeds" 
                              loading="lazy"
@@ -676,7 +700,7 @@
             <div class="flex flex-col md:flex-row-reverse justify-between items-center gap-16">
                 <!-- Illustration: Success/Growth Image -->
                 <div class="w-full md:w-1/2 mb-8 md:mb-0 flex justify-center" data-aos="fade-left" data-aos-delay="250">
-                    <div class="w-206 h-auto rounded-2xl overflow-hidden">
+                    <div class="w-full max-w-md mx-auto h-auto rounded-2xl overflow-hidden">
                         <img src="./img/img-3.png" 
                              alt="Custom website design mockups and branding elements showcasing unique business identity" 
                              loading="lazy"
@@ -731,7 +755,7 @@
             <div class="flex flex-col md:flex-row justify-between items-center gap-16">
                 <!-- Illustration: Woman presenting graph -->
                 <div class="w-full md:w-1/2 mb-8 md:mb-0 flex justify-center" data-aos="fade-right" data-aos-delay="250">
-                    <div class="w-206 h-auto rounded-2xl overflow-hidden">
+                    <div class="w-full max-w-md mx-auto h-auto rounded-2xl overflow-hidden">
                         <img src="./img/img-4.png" 
                              alt="Website quality testing and device compatibility analysis across multiple screens" 
                              loading="lazy"
@@ -788,7 +812,7 @@
             <div class="flex flex-col md:flex-row-reverse justify-between items-center gap-16">
                 <!-- Illustration: Success/Growth Image -->
                 <div class="w-full md:w-1/2 mb-8 md:mb-0 flex justify-center" data-aos="fade-left" data-aos-delay="250">
-                    <div class="w-206 h-auto rounded-2xl overflow-hidden">
+                    <div class="w-full max-w-md mx-auto h-auto rounded-2xl overflow-hidden">
                         <img src="./img/img-5.png" 
                              alt="SEO optimization dashboard showing search rankings, traffic growth, and digital marketing analytics" 
                              loading="lazy"
