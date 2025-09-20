@@ -1435,6 +1435,48 @@
     
     <script>
         /* ================================ */
+        /* PREVENT AUTO-SCROLL ON REFRESH */
+        /* ================================ */
+        // Prevent unwanted scrolling on page refresh, especially on mobile
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
+        
+        // Temporarily disable smooth scrolling during page load
+        document.documentElement.style.scrollBehavior = 'auto';
+        
+        // Reset scroll position on page load
+        window.addEventListener('beforeunload', function() {
+            window.scrollTo(0, 0);
+        });
+        
+        // Re-enable smooth scrolling after page is fully loaded
+        window.addEventListener('load', function() {
+            // Small delay to ensure everything is loaded
+            setTimeout(function() {
+                document.documentElement.style.scrollBehavior = 'smooth';
+            }, 100);
+        });
+        
+        // Handle hash fragments in URL that might cause unwanted scrolling
+        window.addEventListener('DOMContentLoaded', function() {
+            // If there's a hash in the URL, temporarily remove it to prevent auto-scroll
+            if (window.location.hash) {
+                const hash = window.location.hash;
+                // Remove hash from URL without triggering scroll
+                history.replaceState(null, null, window.location.pathname + window.location.search);
+                // Scroll to top
+                window.scrollTo(0, 0);
+                // Restore hash after a delay if needed
+                setTimeout(function() {
+                    if (hash && document.querySelector(hash)) {
+                        history.replaceState(null, null, window.location.pathname + window.location.search + hash);
+                    }
+                }, 500);
+            }
+        });
+        
+        /* ================================ */
         /* FAQ FUNCTIONALITY */
         /* ================================ */
         function toggleFaq(id) {
