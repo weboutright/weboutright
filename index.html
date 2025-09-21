@@ -142,9 +142,9 @@
         </ul>
         
         <!-- Desktop Contact Button -->
-        <button class="hidden md:block orange-btn text-white px-6 py-3 rounded-md font-semibold text-sm hover:shadow-lg transition-all duration-300">
-            <a href="#contact" class="text-white no-underline">Contact Us</a>
-        </button>
+        <a href="#contact" class="hidden md:block orange-btn text-white px-6 py-3 rounded-md font-semibold text-sm hover:shadow-lg transition-all duration-300 no-underline">
+            Contact Us
+        </a>
         
         <!-- Mobile Hamburger Button -->
         <button id="mobileMenuBtn" class="md:hidden text-white text-2xl z-50 relative">
@@ -167,9 +167,9 @@
                     </ul>
                     
                     <!-- Mobile Contact Button -->
-                    <button class="orange-btn text-white px-6 py-3 rounded-md font-semibold text-base w-full hover:shadow-lg transition-all duration-300" onclick="closeMobileMenu()">
-                        <a href="#contact" class="text-white no-underline">Contact Us</a>
-                    </button>
+                    <a href="#contact" class="orange-btn text-white px-6 py-3 rounded-md font-semibold text-base w-full hover:shadow-lg transition-all duration-300 no-underline block text-center" onclick="closeMobileMenu()">
+                        Contact Us
+                    </a>
                 </div>
             </div>
         </div>
@@ -849,7 +849,7 @@
                              width="400" 
                              height="300"
                              class="w-full h-full object-cover" 
-                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">>
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                         <div class="w-full h-full flex items-center justify-center" style="display: none;">
                             <span class="text-gray-400 font-medium">Professional customer service representative ready to assist with web development inquiries</span>
                         </div>
@@ -863,7 +863,7 @@
                     <h2 class="text-4xl font-bold text-gray-800 mb-8 leading-tight" data-aos="fade-up" data-aos-delay="100">Ready To Start Your Next Project?</h2>
                     
                     <!-- Contact Form -->
-                    <form action="https://submit-form.com/2GKqoOcNb" method="POST" class="space-y-6" data-aos="fade-up" data-aos-delay="150">
+                    <form action="https://submit-form.com/2GKqoOcNb" method="POST" class="space-y-6" data-aos="fade-up" data-aos-delay="150" onsubmit="return handleFormSubmit(event)">
                         <input type="hidden" name="_redirect" value="https://weboutright.com.au/Message-Received.html" />
                         <!-- Honeypot to reduce spam -->
                         <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
@@ -927,7 +927,7 @@
                         </div>
                         
                         <div class="pt-2">
-                            <button type="button" class="group orange-btn text-white px-8 py-4 rounded-md font-semibold text-base w-full transition-all duration-300 flex items-center justify-center" onclick="submitForm(); gtag('event', 'submit', {'event_category': 'contact', 'event_label': 'contact_form'});">
+                            <button type="submit" class="group orange-btn text-white px-8 py-4 rounded-md font-semibold text-base w-full transition-all duration-300 flex items-center justify-center" onclick="gtag('event', 'submit', {'event_category': 'contact', 'event_label': 'contact_form'});">
                                 <span class="mr-3">Send Message</span>
                                 <i class="fas fa-paper-plane group-hover:translate-x-1 transition-transform duration-300"></i>
                             </button>

@@ -272,6 +272,43 @@ function submitForm() {
 // Make submitForm globally available
 window.submitForm = submitForm;
 
+/* ================================ */
+/* FORM SUBMISSION HANDLER */
+/* ================================ */
+function handleFormSubmit(event) {
+    event.preventDefault(); // Prevent default form submission
+    
+    // Check if reCAPTCHA is loaded
+    if (typeof grecaptcha === 'undefined') {
+        console.warn('reCAPTCHA not loaded, submitting form without verification');
+        // Submit form directly if reCAPTCHA is not available
+        event.target.submit();
+        return false;
+    }
+    
+    // Execute reCAPTCHA
+    grecaptcha.ready(function() {
+        grecaptcha.execute('6LdEUM4rAAAAAIP5ReRsncx8zpbl-56yDSEAnQ3p', {action: 'submit'}).then(function(token) {
+            // Add token to hidden input
+            document.getElementById('g-recaptcha-response').value = token;
+            console.log('reCAPTCHA token generated successfully');
+            
+            // Submit the form
+            event.target.submit();
+        }).catch(function(error) {
+            console.error('reCAPTCHA error:', error);
+            // Submit form anyway on reCAPTCHA error
+            console.warn('Submitting form without reCAPTCHA due to error');
+            event.target.submit();
+        });
+    });
+    
+    return false; // Prevent default submission until reCAPTCHA is complete
+}
+
+// Make handleFormSubmit globally available
+window.handleFormSubmit = handleFormSubmit;
+
 function onRecaptchaSuccess(token) {
     // This function is no longer needed with the new implementation
     // but keeping it for compatibility
