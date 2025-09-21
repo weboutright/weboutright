@@ -854,8 +854,7 @@
                     <h2 class="text-4xl font-bold text-gray-800 mb-8 leading-tight">Ready To Start Your Next Project?</h2>
                     
                     <!-- Contact Form -->
-                    <form action="https://submit-form.com/2GKqoOcNb" method="POST" class="space-y-6">
-                        <input type="hidden" name="_redirect" value="https://weboutright.com.au/Message-Received.html" />
+                    <form action="https://submit-form.com/2GKqoOcNb" method="POST" class="space-y-6" onsubmit="return handleFormSubmit(event);">
                         <!-- Honeypot to reduce spam -->
                         <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
                         <!-- Hidden reCAPTCHA field for token -->
@@ -918,7 +917,7 @@
                         </div>
                         
                         <div class="pt-2">
-                            <button type="submit" class="group orange-btn text-white px-8 py-4 rounded-md font-semibold text-base w-full transition-all duration-300 flex items-center justify-center" onclick="gtag('event', 'submit', {'event_category': 'contact', 'event_label': 'contact_form'});">
+                            <button type="submit" class="group orange-btn text-white px-8 py-4 rounded-md font-semibold text-base w-full transition-all duration-300 flex items-center justify-center">
                                 <span class="mr-3">Send Message</span>
                                 <i class="fas fa-paper-plane group-hover:translate-x-1 transition-transform duration-300"></i>
                             </button>

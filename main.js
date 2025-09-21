@@ -252,11 +252,25 @@ window.submitForm = submitForm;
 function handleFormSubmit(event) {
     event.preventDefault(); // Prevent default form submission
     
+    // Store current scroll position
+    formScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+    
+    // Track analytics event
+    if (typeof gtag === 'function') {
+        gtag('event', 'submit', {'event_category': 'contact', 'event_label': 'contact_form'});
+    }
+    
+    // Show submission feedback without leaving the page
+    const submitButton = event.target.querySelector('button[type="submit"]');
+    const originalButtonText = submitButton.innerHTML;
+    submitButton.innerHTML = '<span class="mr-3">Sending...</span><i class="fas fa-spinner fa-spin"></i>';
+    submitButton.disabled = true;
+    
     // Check if reCAPTCHA is loaded
     if (typeof grecaptcha === 'undefined') {
         console.warn('reCAPTCHA not loaded, submitting form without verification');
-        // Submit form directly if reCAPTCHA is not available
-        event.target.submit();
+        // Submit form using AJAX to prevent page redirect
+        submitFormAjax(event.target, submitButton, originalButtonText);
         return false;
     }
     
@@ -267,21 +281,112 @@ function handleFormSubmit(event) {
             document.getElementById('g-recaptcha-response').value = token;
             console.log('reCAPTCHA token generated successfully');
             
-            // Submit the form
-            event.target.submit();
+            // Submit form using AJAX to prevent page redirect
+            submitFormAjax(event.target, submitButton, originalButtonText);
         }).catch(function(error) {
             console.error('reCAPTCHA error:', error);
-            // Submit form anyway on reCAPTCHA error
+            // Submit form anyway on reCAPTCHA error using AJAX
             console.warn('Submitting form without reCAPTCHA due to error');
-            event.target.submit();
+            submitFormAjax(event.target, submitButton, originalButtonText);
         });
     });
     
     return false; // Prevent default submission until reCAPTCHA is complete
 }
 
-// Make handleFormSubmit globally available
-window.handleFormSubmit = handleFormSubmit;
+// AJAX form submission to prevent page redirect and maintain scroll position
+function submitFormAjax(form, submitButton, originalButtonText) {
+    const formData = new FormData(form);
+    
+    fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            // Success - show success message
+            submitButton.innerHTML = '<span class="mr-3">Message Sent!</span><i class="fas fa-check"></i>';
+            submitButton.style.background = 'linear-gradient(135deg, #22c55e, #16a34a)';
+            
+            // Reset form
+            form.reset();
+            
+            // Show success notification
+            showNotification('Message sent successfully! We\'ll get back to you within 24 hours.', 'success');
+            
+            // Reset button after 3 seconds
+            setTimeout(() => {
+                submitButton.innerHTML = originalButtonText;
+                submitButton.disabled = false;
+                submitButton.style.background = '';
+            }, 3000);
+        } else {
+            throw new Error('Form submission failed');
+        }
+    })
+    .catch(error => {
+        console.error('Form submission error:', error);
+        
+        // Reset button
+        submitButton.innerHTML = originalButtonText;
+        submitButton.disabled = false;
+        
+        // Show error notification
+        showNotification('There was an issue sending your message. Please try again.', 'error');
+    });
+}
+
+// Notification system
+function showNotification(message, type) {
+    // Remove any existing notifications
+    const existingNotification = document.querySelector('.form-notification');
+    if (existingNotification) {
+        existingNotification.remove();
+    }
+    
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = `form-notification fixed top-4 right-4 z-50 p-4 rounded-md shadow-lg max-w-sm transform transition-all duration-300 translate-x-full opacity-0`;
+    
+    if (type === 'success') {
+        notification.className += ' bg-green-500 text-white';
+        notification.innerHTML = `<div class="flex items-center"><i class="fas fa-check-circle mr-2"></i>${message}</div>`;
+    } else {
+        notification.className += ' bg-red-500 text-white';
+        notification.innerHTML = `<div class="flex items-center"><i class="fas fa-exclamation-circle mr-2"></i>${message}</div>`;
+    }
+    
+    document.body.appendChild(notification);
+    
+    // Animate in
+    setTimeout(() => {
+        notification.style.transform = 'translateX(0)';
+        notification.style.opacity = '1';
+    }, 100);
+    
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+        notification.style.transform = 'translateX(100%)';
+        notification.style.opacity = '0';
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.remove();
+            }
+        }, 300);
+    }, 5000);
+}
+
+// Restore scroll position if form submission fails or is interrupted
+window.addEventListener('pageshow', function(event) {
+    if (event.persisted && formScrollPosition > 0) {
+        setTimeout(function() {
+            window.scrollTo(0, formScrollPosition);
+        }, 50);
+    }
+});
 
 function onRecaptchaSuccess(token) {
     // This function is no longer needed with the new implementation

@@ -1,5 +1,4 @@
-
-        /* ================================ */
+/* ================================ */
 /* CSS VARIABLES */
 /* ================================ */
 :root {
@@ -809,3 +808,27 @@ button:active {
         transform: scale(1.02) !important;
     }
 }
+
+/* ================================ */
+/* FORM NOTIFICATION STYLES */
+/* ================================ */
+.form-notification {
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.4;
+    border-radius: 8px;
+    backdrop-filter: blur(10px);
+}
+
+.form-notification .fas {
+    flex-shrink: 0;
+}
+
+/* Ensure notifications appear above all other content */
+.form-notification {
+    z-index: 9999 !important;
+}
+
+/* ================================ */
+/* EXISTING STYLES CONTINUE... */
