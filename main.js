@@ -7,17 +7,20 @@
 /* ================================ */
 // Load Schema.org structured data from external JSON file
 document.addEventListener('DOMContentLoaded', function() {
-    fetch('./schema.json')
-        .then(response => response.json())
-        .then(data => {
-            const script = document.createElement('script');
-            script.type = 'application/ld+json';
-            script.textContent = JSON.stringify(data);
-            document.head.appendChild(script);
-        })
-        .catch(error => {
-            console.warn('Schema.org data could not be loaded:', error);
-        });
+    // Load schema data asynchronously after critical content
+    setTimeout(() => {
+        fetch('./schema.json')
+            .then(response => response.json())
+            .then(data => {
+                const script = document.createElement('script');
+                script.type = 'application/ld+json';
+                script.textContent = JSON.stringify(data);
+                document.head.appendChild(script);
+            })
+            .catch(error => {
+                console.warn('Schema.org data could not be loaded:', error);
+            });
+    }, 100);
 });
 
 /* ================================ */
@@ -40,57 +43,28 @@ window.addEventListener('load', function() {
         });
     }
     
-    // Load Google Analytics asynchronously after initial page load
-    const script = document.createElement('script');
-    script.src = 'https://www.googletagmanager.com/gtag/js?id=G-LD3JGJF16R';
-    script.async = true;
-    document.head.appendChild(script);
-    
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-LD3JGJF16R', {
-        // Minimize data collection for better performance
-        send_page_view: false,
-        cookie_flags: 'SameSite=None;Secure'
-    });
-    
-    // Send page view after everything is loaded
-    gtag('event', 'page_view');
-});
-
-/* ================================ */
-/* AOS ANIMATION LOADING */
-/* ================================ */
-document.addEventListener('DOMContentLoaded', function() {
-    // Check if user prefers reduced motion
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    
-    // Load AOS unless user specifically prefers reduced motion
-    if (!prefersReducedMotion) {
+    // Load Google Analytics asynchronously after initial page load - delayed for performance
+    setTimeout(() => {
         const script = document.createElement('script');
-        script.src = 'https://unpkg.com/aos@2.3.1/dist/aos.js';
+        script.src = 'https://www.googletagmanager.com/gtag/js?id=G-LD3JGJF16R';
         script.async = true;
-        script.onload = function() {
-            AOS.init({
-                duration: 600, // Restored normal duration
-                easing: 'ease-in-out',
-                once: true,
-                offset: 50, // Restored normal offset
-                disable: false,
-                // Disable on mobile only if performance is poor
-                disable: window.innerWidth < 576 ? true : false
-            });
-        };
         document.head.appendChild(script);
-    } else {
-        // Remove AOS attributes only if user prefers reduced motion
-        const aosElements = document.querySelectorAll('[data-aos]');
-        aosElements.forEach(el => {
-            el.removeAttribute('data-aos');
-            el.removeAttribute('data-aos-delay');
+        
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-LD3JGJF16R', {
+            // Minimize data collection for better performance
+            send_page_view: false,
+            cookie_flags: 'SameSite=None;Secure'
         });
-    }
+        
+        // Send page view after everything is loaded
+        gtag('event', 'page_view');
+        
+        // Make gtag available globally
+        window.gtag = gtag;
+    }, 2000); // Delay analytics by 2 seconds for better initial page load
 });
 
 /* ================================ */
