@@ -385,7 +385,13 @@ document.addEventListener('DOMContentLoaded', function() {
         mobileMenuOverlay.classList.add('active');
         hamburgerIcon.classList.add('active');
         body.classList.add('menu-open');
+        html.classList.add('menu-open-html');
         html.style.overflow = 'hidden';
+        body.style.overflow = 'hidden';
+        
+        // Additional prevention for mobile browsers
+        document.addEventListener('touchmove', preventScroll, { passive: false });
+        document.addEventListener('wheel', preventScroll, { passive: false });
         
         // Track menu open event
         if (window.gtag) {
@@ -401,7 +407,13 @@ document.addEventListener('DOMContentLoaded', function() {
         mobileMenuOverlay.classList.remove('active');
         hamburgerIcon.classList.remove('active');
         body.classList.remove('menu-open');
+        html.classList.remove('menu-open-html');
         html.style.overflow = '';
+        body.style.overflow = '';
+        
+        // Remove scroll prevention
+        document.removeEventListener('touchmove', preventScroll);
+        document.removeEventListener('wheel', preventScroll);
         
         // Track menu close event
         if (window.gtag) {
@@ -409,6 +421,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 'event_category': 'navigation',
                 'event_label': 'mobile_menu'
             });
+        }
+    }
+
+    // Function to prevent scroll events
+    function preventScroll(e) {
+        if (mobileMenuOverlay && mobileMenuOverlay.classList.contains('active')) {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
         }
     }
 
