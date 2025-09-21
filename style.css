@@ -47,6 +47,23 @@ body {
     padding: 0;
 }
 
+/* Prevent scrolling when mobile menu is active */
+body.menu-open {
+    overflow: hidden !important;
+    height: 100vh !important;
+}
+
+/* Additional prevention for webkit browsers */
+body.menu-open {
+    -webkit-overflow-scrolling: touch;
+    touch-action: none;
+}
+
+/* Prevent scrolling on html element too */
+html:has(body.menu-open) {
+    overflow: hidden !important;
+}
+
 section {
     scroll-margin-top: 80px;
 }
@@ -254,7 +271,7 @@ img {
     height: 50px;
     background: linear-gradient(45deg, var(--accent-orange), #ff7043);
     border-radius: 8px;
-    display: none;
+    display: flex;
     align-items: center;
     justify-content: center;
     color: white;
@@ -764,10 +781,6 @@ button:active {
     .md\:pl-12 { padding-left: 3rem; }
     .md\:col-span-2 { grid-column: span 2 / span 2; }
     .md\:max-w-full { max-width: 100%; }
-    
-    .back-to-top {
-        display: flex;
-    }
 }
 
 /* Large screens (1024px and up) */
@@ -875,6 +888,8 @@ button:active {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     position: relative;
     overflow: hidden;
+    cursor: pointer;
+    display: flex; /* Always show the hamburger menu */
 }
 
 #mobileMenuBtn::before {
@@ -939,10 +954,10 @@ button:active {
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 100vh; /* Use viewport height instead of 100% */
     background: rgba(0, 0, 0, 0);
     backdrop-filter: blur(0px);
-    z-index: 1000;
+    z-index: 9999; /* Ensure menu appears above all content */
     opacity: 0;
     visibility: hidden;
     transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
@@ -964,7 +979,7 @@ button:active {
     right: 0;
     width: 340px;
     max-width: 85vw;
-    height: 100%;
+    height: 100vh; /* Use viewport height instead of 100% */
     background: linear-gradient(135deg, var(--primary-navy) 0%, var(--secondary-navy) 100%);
     backdrop-filter: blur(20px);
     border-left: 1px solid rgba(255, 255, 255, 0.15);
@@ -976,6 +991,14 @@ button:active {
     flex-direction: column;
     box-shadow: -12px 0 48px rgba(0, 0, 0, 0.4);
     border-radius: 20px 0 0 20px;
+}
+
+/* Desktop adjustments for larger screens */
+@media (min-width: 769px) {
+    .mobile-menu-panel {
+        width: 420px;
+        max-width: 50vw;
+    }
 }
 
 .mobile-menu-overlay.active .mobile-menu-panel {

@@ -103,74 +103,66 @@
             <span class="text-orange-500 font-extrabold">WEB</span><span class="font-light">OUTRIGHT</span>
         </div>
         
-        <!-- Desktop Navigation Menu -->
-        <ul class="hidden md:flex space-x-10 text-lg font-semibold">
-            <li>
-                <a href="#" class="hover:text-orange-500 transition-all duration-300 relative group text-white tracking-wide">
-                    Home
-                </a>
-            </li>
-            <li>
-                <a href="#speed-security" class="hover:text-orange-500 transition-all duration-300 relative group text-white tracking-wide">
-                    About
-                </a>
-            </li>
-            <li>
-                <a href="#pricing" class="hover:text-orange-500 transition-all duration-300 relative group text-white tracking-wide">
-                    Services
-                </a>
-            </li>
-            <li>
-                <a href="#faq" class="hover:text-orange-500 transition-all duration-300 relative group text-white tracking-wide">
-                    FAQ
-                </a>
-            </li>
-            <li>
-                <a href="#contact" class="hover:text-orange-500 transition-all duration-300 relative group text-white tracking-wide">
-                    Contact
-                </a>
-            </li>
-        </ul>
-        
-        <!-- Desktop Contact Button -->
-        <a href="#contact" class="hidden md:block orange-btn text-white px-6 py-3 rounded-md font-semibold text-sm hover:shadow-lg transition-all duration-300 no-underline">
-            Contact Us
-        </a>
-        
-        <!-- Mobile Menu Button -->
-        <button id="mobileMenuBtn" class="md:hidden text-white text-2xl z-50 relative focus:outline-none">
+        <!-- Hamburger Menu Button -->
+        <button id="mobileMenuBtn" class="flex flex-col justify-center items-center">
             <div class="hamburger-icon">
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
             </div>
         </button>
-        
-        <!-- Mobile Menu Overlay -->
-        <div id="mobileMenu" class="mobile-menu-overlay">
-            <div class="mobile-menu-panel">
-                <div class="mobile-menu-header">
-                    <div class="mobile-menu-logo">
-                        <span class="orange-text">WEB</span>OUTRIGHT
-                    </div>
-                    <button id="closeMenuBtn" class="close-btn">
-                        <i class="fas fa-times"></i>
-                    </button>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobileMenuOverlay" class="mobile-menu-overlay">
+        <div class="mobile-menu-panel">
+            <!-- Mobile Menu Header -->
+            <div class="mobile-menu-header">
+                <div class="mobile-menu-logo">
+                    <span class="orange-text">WEB</span>OUTRIGHT
                 </div>
-                <ul class="mobile-menu-links">
-                    <li><a href="#" class="mobile-menu-link">Home</a></li>
-                    <li><a href="#speed-security" class="mobile-menu-link">About</a></li>
-                    <li><a href="#pricing" class="mobile-menu-link">Services</a></li>
-                    <li><a href="#faq" class="mobile-menu-link">FAQ</a></li>
-                    <li><a href="#contact" class="mobile-menu-link">Contact</a></li>
-                </ul>
-                <div class="mobile-menu-footer">
-                    <a href="#contact" class="mobile-contact-btn">Contact Us</a>
-                </div>
+                <button id="closeMenuBtn" class="close-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- Mobile Menu Links -->
+            <ul class="mobile-menu-links">
+                <li>
+                    <a href="#" class="mobile-menu-link" data-section="home">
+                        Home
+                    </a>
+                </li>
+                <li>
+                    <a href="#speed-security" class="mobile-menu-link" data-section="about">
+                        About
+                    </a>
+                </li>
+                <li>
+                    <a href="#pricing" class="mobile-menu-link" data-section="services">
+                        Services
+                    </a>
+                </li>
+                <li>
+                    <a href="#faq" class="mobile-menu-link" data-section="faq">
+                        FAQ
+                    </a>
+                </li>
+                <li>
+                    <a href="#contact" class="mobile-menu-link" data-section="contact">
+                        Contact
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Mobile Menu Footer -->
+            <div class="mobile-menu-footer">
+                <a href="#contact" class="mobile-contact-btn">
+                    Get Started
+                </a>
             </div>
         </div>
-
-    </nav>
+    </div>
 
     <!-- Hero Section -->
     <section class="px-4 sm:px-8 lg:px-12 py-16 sm:py-20 lg:py-24">
