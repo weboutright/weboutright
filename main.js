@@ -380,8 +380,21 @@ document.addEventListener('DOMContentLoaded', function() {
     const body = document.body;
     const html = document.documentElement;
 
+    // Debug logging to help diagnose any issues
+    console.log('Mobile menu elements:', {
+        mobileMenuBtn: !!mobileMenuBtn,
+        mobileMenuOverlay: !!mobileMenuOverlay,
+        closeMenuBtn: !!closeMenuBtn,
+        hamburgerIcon: !!hamburgerIcon,
+        mobileMenuLinksCount: mobileMenuLinks ? mobileMenuLinks.length : 0
+    });
+
     // Function to open mobile menu
     function openMobileMenu() {
+        if (!mobileMenuOverlay || !hamburgerIcon) {
+            console.error('Mobile menu elements not found');
+            return;
+        }
         mobileMenuOverlay.classList.add('active');
         hamburgerIcon.classList.add('active');
         body.classList.add('menu-open');
@@ -404,6 +417,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Function to close mobile menu
     function closeMobileMenu() {
+        if (!mobileMenuOverlay || !hamburgerIcon) {
+            console.error('Mobile menu elements not found');
+            return;
+        }
         mobileMenuOverlay.classList.remove('active');
         hamburgerIcon.classList.remove('active');
         body.classList.remove('menu-open');
@@ -435,6 +452,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Function to toggle mobile menu
     function toggleMobileMenu() {
+        if (!mobileMenuOverlay) {
+            console.error('Mobile menu overlay not found');
+            return;
+        }
         if (mobileMenuOverlay.classList.contains('active')) {
             closeMobileMenu();
         } else {
@@ -461,33 +482,35 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Close menu when clicking on menu links
-    mobileMenuLinks.forEach(function(link) {
-        link.addEventListener('click', function() {
-            const section = this.getAttribute('data-section');
-            
-            // Track menu link click
-            if (window.gtag) {
-                gtag('event', 'menu_link_click', {
-                    'event_category': 'navigation',
-                    'event_label': section || 'unknown'
-                });
-            }
-            
-            // Close menu after a short delay to allow navigation
-            setTimeout(closeMobileMenu, 300);
+    if (mobileMenuLinks && mobileMenuLinks.length > 0) {
+        mobileMenuLinks.forEach(function(link) {
+            link.addEventListener('click', function() {
+                const section = this.getAttribute('data-section');
+                
+                // Track menu link click
+                if (window.gtag) {
+                    gtag('event', 'menu_link_click', {
+                        'event_category': 'navigation',
+                        'event_label': section || 'unknown'
+                    });
+                }
+                
+                // Close menu after a short delay to allow navigation
+                setTimeout(closeMobileMenu, 300);
+            });
         });
-    });
+    }
 
     // Close menu on ESC key press
     document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && mobileMenuOverlay.classList.contains('active')) {
+        if (e.key === 'Escape' && mobileMenuOverlay && mobileMenuOverlay.classList.contains('active')) {
             closeMobileMenu();
         }
     });
 
     // Handle window resize - close menu if window becomes large
     window.addEventListener('resize', function() {
-        if (window.innerWidth > 768 && mobileMenuOverlay.classList.contains('active')) {
+        if (window.innerWidth > 768 && mobileMenuOverlay && mobileMenuOverlay.classList.contains('active')) {
             closeMobileMenu();
         }
     });
