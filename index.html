@@ -1244,8 +1244,8 @@
                         <input type="hidden" name="_redirect" value="https://weboutright.com.au/Message-Received.html" />
                         <!-- Honeypot to reduce spam -->
                         <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
-                        <!-- Hidden reCAPTCHA -->
-                        <div class="g-recaptcha" data-sitekey="6LdEUM4rAAAAAIP5ReRsncx8zpbl-56yDSEAnQ3p" data-size="invisible" data-callback="onRecaptchaSuccess" style="position: absolute; left: -9999px; visibility: hidden;"></div>
+                        <!-- Hidden reCAPTCHA field for token -->
+                        <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response">
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
@@ -1573,12 +1573,32 @@
         /* RECAPTCHA CALLBACK */
         /* ================================ */
         function submitForm() {
-            // Execute reCAPTCHA
-            grecaptcha.execute();
+            // Check if reCAPTCHA is loaded
+            if (typeof grecaptcha === 'undefined') {
+                console.error('reCAPTCHA not loaded');
+                alert('Please wait for the page to fully load and try again.');
+                return;
+            }
+            
+            // Execute reCAPTCHA with the site key
+            grecaptcha.ready(function() {
+                grecaptcha.execute('6LdEUM4rAAAAAIP5ReRsncx8zpbl-56yDSEAnQ3p', {action: 'submit'}).then(function(token) {
+                    // Add token to hidden input
+                    document.getElementById('g-recaptcha-response').value = token;
+                    console.log('reCAPTCHA token generated successfully');
+                    // Submit the form
+                    document.querySelector('form[action*="submit-form.com"]').submit();
+                }).catch(function(error) {
+                    console.error('reCAPTCHA error:', error);
+                    alert('There was an issue with the security verification. Please try again.');
+                });
+            });
         }
         
         function onRecaptchaSuccess(token) {
-            // Submit the form when reCAPTCHA is successful
+            // This function is no longer needed with the new implementation
+            // but keeping it for compatibility
+            document.getElementById('g-recaptcha-response').value = token;
             document.querySelector('form[action*="submit-form.com"]').submit();
         }
     </script>
@@ -1594,6 +1614,6 @@
     </script>
 
     <!-- Google reCAPTCHA script -->
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script src="https://www.google.com/recaptcha/api.js?render=6LdEUM4rAAAAAIP5ReRsncx8zpbl-56yDSEAnQ3p" async defer></script>
 </body>
 </html>
