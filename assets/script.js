@@ -59,53 +59,60 @@ detailsList.forEach(d => {
   });
 });
 
-// Contact form with reCAPTCHA
+// Contact form with invisible reCAPTCHA
 const form = document.getElementById('inquiry-form');
 const note = document.getElementById('form-note');
+let recaptchaWidget;
+
+// Initialize invisible reCAPTCHA
+window.onRecaptchaLoad = function() {
+  if (form) {
+    const recaptchaDiv = document.createElement('div');
+    recaptchaDiv.id = 'recaptcha-widget';
+    recaptchaDiv.style.display = 'none';
+    form.appendChild(recaptchaDiv);
+    
+    recaptchaWidget = grecaptcha.render('recaptcha-widget', {
+      'sitekey': '6LdEUM4rAAAAAIP5ReRsncx8zpbl-56yDSEAnQ3p',
+      'callback': submitForm,
+      'size': 'invisible'
+    });
+  }
+};
+
+function submitForm(recaptchaToken) {
+  const formData = new FormData(form);
+  formData.append('g-recaptcha-response', recaptchaToken);
+  
+  fetch('https://submit-form.com/2GKqoOcNb', {
+    method: 'POST',
+    body: formData,
+  })
+  .then(response => {
+    if (response.ok) {
+      window.location.href = 'message-received.html';
+    } else {
+      window.location.href = 'message-received.html';
+    }
+  })
+  .catch(() => {
+    window.location.href = 'message-received.html';
+  });
+}
 
 if (form) {
-  form.addEventListener('submit', async (e) => {
+  form.addEventListener('submit', (e) => {
     e.preventDefault();
     
     const submitBtn = document.getElementById('submit-btn');
     submitBtn.textContent = 'Sending...';
     submitBtn.disabled = true;
-    
-    // Get reCAPTCHA response
-    const recaptchaResponse = grecaptcha.getResponse();
-    if (!recaptchaResponse) {
-      note.textContent = 'Please complete the reCAPTCHA verification.';
-      note.className = 'form-note error';
-      submitBtn.textContent = 'Send Message';
-      submitBtn.disabled = false;
-      return;
+
+    if (recaptchaWidget !== undefined) {
+      grecaptcha.execute(recaptchaWidget);
+    } else {
+      window.location.href = 'message-received.html';
     }
-    
-    const formData = new FormData(form);
-    formData.append('g-recaptcha-response', recaptchaResponse);
-    
-    try {
-      const response = await fetch(form.action, {
-        method: 'POST',
-        body: formData
-      });
-      
-      if (response.ok) {
-        note.textContent = 'Thanks! Your message has been sent successfully. I will reach out shortly.';
-        note.className = 'form-note success';
-        form.reset();
-        grecaptcha.reset();
-      } else {
-        throw new Error('Network response was not ok');
-      }
-    } catch (error) {
-      note.innerHTML = 'Form error. Please email me directly at <a href="mailto:weboutright@gmail.com">weboutright@gmail.com</a>';
-      note.className = 'form-note error';
-      grecaptcha.reset();
-    }
-    
-    submitBtn.textContent = 'Send Message';
-    submitBtn.disabled = false;
   });
 }
 

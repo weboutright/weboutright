@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/style.css" />
-  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+  <script src="https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit" async defer></script>
   <script defer src="assets/script.js"></script>
   
   <!-- Structured Data -->
@@ -324,8 +324,6 @@
             </label>
             
             <button type="submit" class="btn btn-primary" id="submit-btn">Send Message</button>
-            
-            <div class="g-recaptcha" data-sitekey="6LdEUM4rAAAAAIP5ReRsncx8zpbl-56yDSEAnQ3p"></div>
             
             <p class="form-note" id="form-note" role="status" aria-live="polite"></p>
           </form>
