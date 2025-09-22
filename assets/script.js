@@ -59,59 +59,61 @@ detailsList.forEach(d => {
   });
 });
 
-// Contact form with invisible reCAPTCHA
+// Contact form with invisible reCAPTCHA (native submit)
 const form = document.getElementById('inquiry-form');
-const note = document.getElementById('form-note');
 let recaptchaWidget;
 
 // Initialize invisible reCAPTCHA
-window.onRecaptchaLoad = function() {
-  if (form) {
-    const recaptchaDiv = document.createElement('div');
-    recaptchaDiv.id = 'recaptcha-widget';
-    recaptchaDiv.style.display = 'none';
-    form.appendChild(recaptchaDiv);
-    
-    recaptchaWidget = grecaptcha.render('recaptcha-widget', {
-      'sitekey': '6LdEUM4rAAAAAIP5ReRsncx8zpbl-56yDSEAnQ3p',
-      'callback': submitForm,
-      'size': 'invisible'
-    });
-  }
+window.onRecaptchaLoad = function () {
+  if (!form) return;
+  const recaptchaDiv = document.createElement('div');
+  recaptchaDiv.id = 'recaptcha-widget';
+  recaptchaDiv.style.display = 'none';
+  form.appendChild(recaptchaDiv);
+
+  recaptchaWidget = grecaptcha.render('recaptcha-widget', {
+    sitekey: '6LdEUM4rAAAAAIP5ReRsncx8zpbl-56yDSEAnQ3p',
+    callback: onRecaptchaSuccess,
+    size: 'invisible'
+  });
 };
 
-function submitForm(recaptchaToken) {
-  const formData = new FormData(form);
-  formData.append('g-recaptcha-response', recaptchaToken);
-  
-  fetch('https://submit-form.com/2GKqoOcNb', {
-    method: 'POST',
-    body: formData,
-  })
-  .then(response => {
-    if (response.ok) {
-      window.location.href = 'message-received.html';
-    } else {
-      window.location.href = 'message-received.html';
-    }
-  })
-  .catch(() => {
-    window.location.href = 'message-received.html';
-  });
+function ensureHidden(name, value) {
+  let input = form.querySelector(`input[name="${name}"]`);
+  if (!input) {
+    input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = name;
+    form.appendChild(input);
+  }
+  input.value = value;
+}
+
+function onRecaptchaSuccess(token) {
+  // Append token and redirect URL, then submit natively
+  ensureHidden('g-recaptcha-response', token);
+  ensureHidden('_redirect', '/message-received.html');
+  form.submit();
 }
 
 if (form) {
   form.addEventListener('submit', (e) => {
+    // Let the browser validate required fields first
+    if (!form.checkValidity()) return; // allow native validation UI
     e.preventDefault();
-    
     const submitBtn = document.getElementById('submit-btn');
-    submitBtn.textContent = 'Sending...';
-    submitBtn.disabled = true;
+    if (submitBtn) {
+      submitBtn.textContent = 'Sending...';
+      submitBtn.disabled = true;
+    }
 
-    if (recaptchaWidget !== undefined) {
+    // Execute invisible reCAPTCHA then submit
+    if (typeof grecaptcha !== 'undefined' && recaptchaWidget !== undefined) {
       grecaptcha.execute(recaptchaWidget);
     } else {
-      window.location.href = 'message-received.html';
+      // Fallback: submit without token
+      ensureHidden('_redirect', '/message-received.html');
+      form.submit();
     }
   });
 }
