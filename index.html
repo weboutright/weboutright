@@ -274,7 +274,6 @@
         <div class="contact-form">
           <h2 class="section-title">Ready To Start Your Next Project?</h2>
           <form id="inquiry-form" action="https://submit-form.com/2GKqoOcNb" method="POST">
-            <input type="hidden" name="_redirect" value="https://weboutright.com.au/message-received.html">
             <div class="grid two sm-one">
               <label class="field">
                 <span>Full Name*</span>
@@ -377,5 +376,26 @@
 
   <!-- Floating Back to Top button -->
   <a href="#top" id="toTop" class="to-top-fab" aria-label="Back to top">↑</a>
+
+  <!-- Thank-you Modal -->
+  <div id="thankyou-modal" class="modal-backdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="thankyou-title">
+      <div class="modal-content">
+        <div class="status-badge" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>Message Received</span>
+        </div>
+        <h2 id="thankyou-title" class="title">Thank You For Reaching Out!</h2>
+        <p class="lead">Your message was sent successfully and has been received by our team.</p>
+        <p class="lead">We appreciate your interest and will respond within 24 hours.</p>
+        <p class="lead">Contact: <a class="email-link" href="mailto:weboutright@gmail.com">weboutright@gmail.com</a></p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary modal-close">Return Home</button>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

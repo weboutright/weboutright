@@ -403,3 +403,36 @@ body.menu-open{overflow:hidden}
 @media (max-width: 380px){
   .hero h1{font-size:clamp(1.4rem, 7.5vw + 0.4rem, 1.8rem)}
 }
+
+/******** Thank You Page ********/
+.thankyou-wrap{display:flex; justify-content:center}
+.thankyou-card{background:#ffffff; color:#101433; border-radius:12px; border:2px solid #e2e8f0; padding:28px; max-width:700px; width:100%; margin-inline:auto; text-align:center; box-shadow:0 10px 30px rgba(0,0,0,.08)}
+.thankyou-card h1{margin:4px 0 10px; font-size:clamp(1.8rem, 2.4vw + 1rem, 2.2rem); color:#0f172a; font-weight:800}
+.thankyou-card .lead{font-size:1.1rem; color:#3a4164}
+.thankyou-icon{display:grid; place-items:center; width:80px; height:80px; border-radius:999px; margin:8px auto 16px; color:var(--brand-2); background:#eef2ff}
+.thankyou-actions{display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:16px}
+.thankyou-card .btn-ghost{background:#eef1fb; color:#0f1330; border-color:transparent}
+
+/* Modal (Thank-you) refined to match site */
+.modal-backdrop{position:fixed; inset:0; background:rgba(14,18,48,.55); backdrop-filter:saturate(120%) blur(8px); display:none; align-items:center; justify-content:center; z-index:1100}
+.modal-backdrop.show{display:flex}
+.modal{width:min(560px,92vw); background:#ffffff; color:#101433; border-radius:20px; border:1px solid #e2e8f0; box-shadow:0 30px 80px rgba(0,0,0,.25); padding:28px; position:relative}
+.modal h2{margin:8px 0 6px; font:800 1.7rem Poppins, sans-serif; color:#0f172a}
+.modal .lead{font-size:1.02rem; color:#3a4164}
+.modal-close{position:absolute; top:12px; right:12px; width:38px; height:38px; display:grid; place-items:center; border-radius:12px; border:1px solid #e2e8f0; background:#fff; color:#0f1330; cursor:pointer; font-weight:800}
+.modal-close:hover{background:#f3f5fa}
+.modal .thankyou-icon{display:grid; place-items:center; width:80px; height:80px; border-radius:16px; margin:2px 0 10px; color:#2d7cff; background:#eef2ff; box-shadow:0 2px 0 rgba(0,0,0,.04) inset}
+.thankyou-actions{display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:14px}
+.thankyou-actions .btn.btn-outline{border-color:#e2e8f0; background:#fff; color:#0f1330}
+
+/* Thank-you modal visual polish + blue border */
+#thankyou-modal .modal{border:2px solid var(--brand-2); text-align:center; display:flex; flex-direction:column; padding:0; min-height:320px}
+#thankyou-modal .modal-content{flex:1; padding:32px 28px 20px 28px; display:flex; flex-direction:column; justify-content:center}
+#thankyou-modal .modal-footer{padding:0 28px 28px 28px; border-top:1px solid #e5e7eb}
+#thankyou-modal .modal-footer .modal-close{position:static; width:auto; height:auto; display:block; border-radius:8px; border:none; background:var(--brand); color:#fff; cursor:pointer; font-weight:600; padding:12px 24px; max-width:180px; margin:0 auto}
+#thankyou-modal .modal-footer .modal-close:hover{background:#e55a1f}
+.modal .status-badge{display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px; background:rgba(255,107,45,.12); border:1px solid rgba(255,107,45,.35); color:var(--brand); font-weight:800; font-size:.9rem; margin:0 auto 10px}
+.modal .status-badge svg{color:var(--brand)}
+.modal h2.title{font:800 1.8rem Poppins, sans-serif; line-height:1.2; margin:6px 0 10px; color:#0f172a}
+.modal p.lead{margin:6px 0 8px}
+.modal .email-link{color:var(--brand); font-weight:700}

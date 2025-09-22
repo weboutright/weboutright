@@ -89,3 +89,78 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
+// Hook the contact form to show a success modal without navigating away
+(function(){
+  const form = document.getElementById('inquiry-form');
+  if (!form) return;
+
+  // Create a hidden iframe target for the form so the page doesn't navigate
+  let iframe = document.getElementById('form-target');
+  if (!iframe){
+    iframe = document.createElement('iframe');
+    iframe.name = 'form-target';
+    iframe.id = 'form-target';
+    iframe.style.display = 'none';
+    document.body.appendChild(iframe);
+  }
+  form.setAttribute('target','form-target');
+
+  const modalBackdrop = document.getElementById('thankyou-modal');
+  let formSubmitting = false; // gate to avoid showing modal on initial iframe load
+
+  const bindClose = () => {
+    if (!modalBackdrop) return;
+    // Close buttons/links
+    modalBackdrop.querySelectorAll('.modal-close').forEach(el => {
+      el.addEventListener('click', (e) => {
+        e.preventDefault();
+        hideModal();
+      });
+    });
+    // Click outside
+    modalBackdrop.addEventListener('click', (e) => {
+      if (e.target === modalBackdrop) hideModal();
+    });
+    // Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modalBackdrop.classList.contains('show')) hideModal();
+    });
+  };
+
+  const showModal = () => {
+    if (!modalBackdrop) return;
+    modalBackdrop.classList.add('show');
+    document.body.style.overflow = 'hidden';
+    const focusEl = modalBackdrop.querySelector('.modal-close, .btn');
+    if (focusEl) focusEl.focus();
+  };
+  const hideModal = () => {
+    if (!modalBackdrop) return;
+    modalBackdrop.classList.remove('show');
+    document.body.style.overflow = '';
+  };
+  bindClose();
+
+  // Show modal only after a real submit completes
+  iframe.addEventListener('load', () => {
+    if (!formSubmitting) return; // ignore initial/load unrelated events
+    formSubmitting = false;
+    showModal();
+    const submitBtn = document.getElementById('submit-btn');
+    if (submitBtn){
+      submitBtn.textContent = 'Send Message';
+      submitBtn.disabled = false;
+    }
+    form.reset();
+  });
+
+  form.addEventListener('submit', () => {
+    formSubmitting = true;
+    const submitBtn = document.getElementById('submit-btn');
+    if (submitBtn){
+      submitBtn.textContent = 'Sending...';
+      submitBtn.disabled = true;
+    }
+  });
+})();
