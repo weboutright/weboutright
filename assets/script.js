@@ -61,6 +61,7 @@ detailsList.forEach(d => {
 
 // Contact form with invisible reCAPTCHA (native submit)
 const form = document.getElementById('inquiry-form');
+let recaptchaSubmitting = false;
 
 // Invisible reCAPTCHA v2 button callback flow
 function onSubmit(token) {
@@ -84,11 +85,21 @@ function onSubmit(token) {
     form.appendChild(gr);
   }
   gr.value = token;
+  // mark that we are submitting from reCAPTCHA callback to avoid intercepting submit again
+  recaptchaSubmitting = true;
   form.submit();
 }
+// Ensure callback is available globally for reCAPTCHA
+window.onSubmit = onSubmit;
 
+// Intercept form submit to execute reCAPTCHA for Enter-key submits as well
 if (form) {
   form.addEventListener('submit', (e) => {
+    // If submit was triggered by onSubmit(), allow native submit
+    if (recaptchaSubmitting) {
+      recaptchaSubmitting = false; // reset for next time
+      return;
+    }
     // Let the browser validate required fields first
     if (!form.checkValidity()) return; // allow native validation UI
     e.preventDefault();
@@ -99,11 +110,19 @@ if (form) {
     }
 
     // Execute invisible reCAPTCHA then submit
-    if (typeof grecaptcha !== 'undefined') {
+    if (typeof grecaptcha !== 'undefined' && typeof grecaptcha.execute === 'function') {
       grecaptcha.execute();
     } else {
-      // Fallback: submit without token
-      ensureHidden('_redirect', '/message-received.html');
+      // Fallback: submit without token (e.g., if reCAPTCHA blocked);
+      // FormSpark will accept without token if reCAPTCHA is disabled server-side
+      let redirect = form.querySelector('input[name="_redirect"]');
+      if (!redirect) {
+        redirect = document.createElement('input');
+        redirect.type = 'hidden';
+        redirect.name = '_redirect';
+        redirect.value = 'https://weboutright.com.au/message-received.html';
+        form.appendChild(redirect);
+      }
       form.submit();
     }
   });
