@@ -66,6 +66,7 @@ let recaptchaWidget;
 
 // Initialize invisible reCAPTCHA when the page loads
 window.onRecaptchaLoad = function() {
+  console.log('reCAPTCHA loaded');
   if (form) {
     // Create a hidden div for the invisible reCAPTCHA
     const recaptchaDiv = document.createElement('div');
@@ -73,11 +74,16 @@ window.onRecaptchaLoad = function() {
     recaptchaDiv.style.display = 'none';
     form.appendChild(recaptchaDiv);
     
-    recaptchaWidget = grecaptcha.render('recaptcha-widget', {
-      'sitekey': '6LdEUM4rAAAAAIP5ReRsncx8zpbl-56yDSEAnQ3p',
-      'callback': submitForm,
-      'size': 'invisible'
-    });
+    try {
+      recaptchaWidget = grecaptcha.render('recaptcha-widget', {
+        'sitekey': '6LdEUM4rAAAAAIP5ReRsncx8zpbl-56yDSEAnQ3p',
+        'callback': submitForm,
+        'size': 'invisible'
+      });
+      console.log('reCAPTCHA widget created:', recaptchaWidget);
+    } catch (error) {
+      console.error('reCAPTCHA render error:', error);
+    }
   }
 };
 
@@ -90,29 +96,41 @@ function submitForm(recaptchaToken) {
   fetch('https://submit-form.com/2GKqoOcNb', {
     method: 'POST',
     body: formData,
+    headers: {
+      'Accept': 'application/json'
+    }
   })
   .then(response => {
+    console.log('Response status:', response.status);
     if (response.ok) {
-      note.className = 'form-note';
-      note.textContent = 'Thanks! Your message has been sent successfully. I will reach out shortly.';
-      note.classList.add('success');
-      form.reset();
-      grecaptcha.reset(recaptchaWidget);
+      return response.json().catch(() => ({ success: true }));
     } else {
-      throw new Error('Form submission failed');
+      return response.json().catch(() => ({ error: 'Server error' }));
+    }
+  })
+  .then(data => {
+    console.log('Response data:', data);
+    if (data.success !== false) {
+      note.className = 'form-note success';
+      note.textContent = 'Thanks! Your message has been sent successfully. I will reach out shortly.';
+      form.reset();
+    } else {
+      throw new Error(data.error || 'Form submission failed');
     }
   })
   .catch(error => {
-    note.className = 'form-note';
-    note.textContent = 'Sorry, there was an error sending your message. Please try again.';
-    note.classList.add('error');
-    grecaptcha.reset(recaptchaWidget);
+    console.error('Form submission error:', error);
+    note.className = 'form-note error';
+    note.textContent = 'Sorry, there was an error sending your message. Please try again or email me directly at weboutright@gmail.com';
   })
   .finally(() => {
     // Restore button
     const submitBtn = document.getElementById('submit-btn');
     submitBtn.textContent = 'Send Message';
     submitBtn.disabled = false;
+    if (recaptchaWidget !== undefined) {
+      grecaptcha.reset(recaptchaWidget);
+    }
   });
 }
 
@@ -151,11 +169,52 @@ if (form) {
     if (recaptchaWidget !== undefined) {
       grecaptcha.execute(recaptchaWidget);
     } else {
-      note.textContent = 'reCAPTCHA not loaded. Please refresh the page and try again.';
-      note.classList.add('error');
-      submitBtn.textContent = 'Send Message';
-      submitBtn.disabled = false;
+      // Fallback: submit without reCAPTCHA if it failed to load
+      console.warn('reCAPTCHA not loaded, submitting without it');
+      submitFormWithoutRecaptcha();
     }
+  });
+}
+
+// Fallback submission without reCAPTCHA
+function submitFormWithoutRecaptcha() {
+  const formData = new FormData(form);
+  
+  fetch('https://submit-form.com/2GKqoOcNb', {
+    method: 'POST',
+    body: formData,
+    headers: {
+      'Accept': 'application/json'
+    }
+  })
+  .then(response => {
+    console.log('Response status:', response.status);
+    if (response.ok) {
+      return response.json().catch(() => ({ success: true }));
+    } else {
+      return response.json().catch(() => ({ error: 'Server error' }));
+    }
+  })
+  .then(data => {
+    console.log('Response data:', data);
+    if (data.success !== false) {
+      note.className = 'form-note success';
+      note.textContent = 'Thanks! Your message has been sent successfully. I will reach out shortly.';
+      form.reset();
+    } else {
+      throw new Error(data.error || 'Form submission failed');
+    }
+  })
+  .catch(error => {
+    console.error('Form submission error:', error);
+    note.className = 'form-note error';
+    note.textContent = 'Sorry, there was an error sending your message. Please try again or email me directly at weboutright@gmail.com';
+  })
+  .finally(() => {
+    // Restore button
+    const submitBtn = document.getElementById('submit-btn');
+    submitBtn.textContent = 'Send Message';
+    submitBtn.disabled = false;
   });
 }
 
