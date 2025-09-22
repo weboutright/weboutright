@@ -13,6 +13,20 @@
   <link rel="stylesheet" href="assets/style.css" />
   <script src="https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit" async defer></script>
   <script defer src="assets/script.js"></script>
+  
+  <!-- Structured Data -->
+  <script>
+    // Load structured data from external JSON file
+    fetch('schema.json')
+      .then(response => response.json())
+      .then(data => {
+        const script = document.createElement('script');
+        script.type = 'application/ld+json';
+        script.textContent = JSON.stringify(data);
+        document.head.appendChild(script);
+      })
+      .catch(error => console.error('Error loading structured data:', error));
+  </script>
 </head>
 <body>
   <!-- Header -->

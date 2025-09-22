@@ -8,13 +8,13 @@
     "url": "https://weboutright.com.au",
     "logo": {
         "@type": "ImageObject",
-        "url": "https://weboutright.com.au/img/harrison.png",
+        "url": "https://weboutright.com.au/assets/img/harrison.png",
         "width": 400,
         "height": 400
     },
     "image": {
         "@type": "ImageObject",
-        "url": "https://weboutright.com.au/img/harrison.png",
+        "url": "https://weboutright.com.au/assets/img/harrison.png",
         "width": 400,
         "height": 400
     },
