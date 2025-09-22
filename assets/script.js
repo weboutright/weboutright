@@ -59,80 +59,9 @@ detailsList.forEach(d => {
   });
 });
 
-// Contact form with FormSpark and invisible reCAPTCHA
+// Contact form - Simplified version with multiple fallbacks
 const form = document.getElementById('inquiry-form');
 const note = document.getElementById('form-note');
-let recaptchaWidget;
-
-// Initialize invisible reCAPTCHA when the page loads
-window.onRecaptchaLoad = function() {
-  console.log('reCAPTCHA loaded');
-  if (form) {
-    // Create a hidden div for the invisible reCAPTCHA
-    const recaptchaDiv = document.createElement('div');
-    recaptchaDiv.id = 'recaptcha-widget';
-    recaptchaDiv.style.display = 'none';
-    form.appendChild(recaptchaDiv);
-    
-    try {
-      recaptchaWidget = grecaptcha.render('recaptcha-widget', {
-        'sitekey': '6LdEUM4rAAAAAIP5ReRsncx8zpbl-56yDSEAnQ3p',
-        'callback': submitForm,
-        'size': 'invisible'
-      });
-      console.log('reCAPTCHA widget created:', recaptchaWidget);
-    } catch (error) {
-      console.error('reCAPTCHA render error:', error);
-    }
-  }
-};
-
-function submitForm(recaptchaToken) {
-  // This function is called when reCAPTCHA is solved
-  const formData = new FormData(form);
-  formData.append('g-recaptcha-response', recaptchaToken);
-  
-  // Submit to FormSpark
-  fetch('https://submit-form.com/2GKqoOcNb', {
-    method: 'POST',
-    body: formData,
-    headers: {
-      'Accept': 'application/json'
-    }
-  })
-  .then(response => {
-    console.log('Response status:', response.status);
-    if (response.ok) {
-      return response.json().catch(() => ({ success: true }));
-    } else {
-      return response.json().catch(() => ({ error: 'Server error' }));
-    }
-  })
-  .then(data => {
-    console.log('Response data:', data);
-    if (data.success !== false) {
-      note.className = 'form-note success';
-      note.textContent = 'Thanks! Your message has been sent successfully. I will reach out shortly.';
-      form.reset();
-    } else {
-      throw new Error(data.error || 'Form submission failed');
-    }
-  })
-  .catch(error => {
-    console.error('Form submission error:', error);
-    note.className = 'form-note error';
-    note.textContent = 'Sorry, there was an error sending your message. Please try again or email me directly at weboutright@gmail.com';
-  })
-  .finally(() => {
-    // Restore button
-    const submitBtn = document.getElementById('submit-btn');
-    submitBtn.textContent = 'Send Message';
-    submitBtn.disabled = false;
-    if (recaptchaWidget !== undefined) {
-      grecaptcha.reset(recaptchaWidget);
-    }
-  });
-}
 
 if (form) {
   form.addEventListener('submit', (e) => {
@@ -165,57 +94,115 @@ if (form) {
     submitBtn.textContent = 'Sending...';
     submitBtn.disabled = true;
 
-    // Execute invisible reCAPTCHA
-    if (recaptchaWidget !== undefined) {
-      grecaptcha.execute(recaptchaWidget);
-    } else {
-      // Fallback: submit without reCAPTCHA if it failed to load
-      console.warn('reCAPTCHA not loaded, submitting without it');
-      submitFormWithoutRecaptcha();
-    }
+    // Try direct form submission first
+    submitFormDirect(formData)
+      .catch(() => {
+        console.log('Direct submission failed, trying alternative method...');
+        return submitFormAlternative(formData);
+      })
+      .catch(() => {
+        console.log('All submission methods failed, showing mailto fallback...');
+        showMailtoFallback(formData);
+      });
   });
 }
 
-// Fallback submission without reCAPTCHA
-function submitFormWithoutRecaptcha() {
-  const formData = new FormData(form);
-  
-  fetch('https://submit-form.com/2GKqoOcNb', {
+// Direct submission method
+function submitFormDirect(formData) {
+  return fetch('https://submit-form.com/2GKqoOcNb', {
     method: 'POST',
     body: formData,
+    mode: 'cors',
     headers: {
       'Accept': 'application/json'
     }
   })
   .then(response => {
-    console.log('Response status:', response.status);
-    if (response.ok) {
-      return response.json().catch(() => ({ success: true }));
+    console.log('Direct submission response:', response.status, response.statusText);
+    if (response.ok || response.status === 200) {
+      showSuccess();
+      return Promise.resolve();
     } else {
-      return response.json().catch(() => ({ error: 'Server error' }));
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
     }
-  })
-  .then(data => {
-    console.log('Response data:', data);
-    if (data.success !== false) {
-      note.className = 'form-note success';
-      note.textContent = 'Thanks! Your message has been sent successfully. I will reach out shortly.';
-      form.reset();
-    } else {
-      throw new Error(data.error || 'Form submission failed');
-    }
-  })
-  .catch(error => {
-    console.error('Form submission error:', error);
-    note.className = 'form-note error';
-    note.textContent = 'Sorry, there was an error sending your message. Please try again or email me directly at weboutright@gmail.com';
-  })
-  .finally(() => {
-    // Restore button
-    const submitBtn = document.getElementById('submit-btn');
-    submitBtn.textContent = 'Send Message';
-    submitBtn.disabled = false;
   });
+}
+
+// Alternative submission method (without CORS mode)
+function submitFormAlternative(formData) {
+  return fetch('https://submit-form.com/2GKqoOcNb', {
+    method: 'POST',
+    body: formData
+  })
+  .then(response => {
+    console.log('Alternative submission response:', response.status);
+    if (response.ok || response.status === 200) {
+      showSuccess();
+      return Promise.resolve();
+    } else {
+      throw new Error(`Alternative method failed: ${response.status}`);
+    }
+  });
+}
+
+// Mailto fallback for when all else fails
+function showMailtoFallback(formData) {
+  const name = formData.get('name');
+  const email = formData.get('email');
+  const business = formData.get('business') || 'Not specified';
+  const website = formData.get('website') || 'Not specified';
+  const service = formData.get('service');
+  const budget = formData.get('budget');
+  const details = formData.get('details') || 'No additional details provided';
+
+  const subject = encodeURIComponent(`New ${service} Inquiry from ${name}`);
+  const body = encodeURIComponent(`
+Name: ${name}
+Email: ${email}
+Business: ${business}
+Current Website: ${website}
+Service: ${service}
+Budget: ${budget}
+
+Project Details:
+${details}
+
+---
+This message was sent from your website contact form.
+  `);
+
+  const mailtoLink = `mailto:weboutright@gmail.com?subject=${subject}&body=${body}`;
+  
+  note.className = 'form-note error';
+  note.innerHTML = `
+    Form submission is experiencing issues. Please:
+    <br><br>
+    <a href="${mailtoLink}" style="color: #2d7cff; text-decoration: underline;">
+      Click here to send via your email client
+    </a>
+    <br><br>
+    Or email me directly at: 
+    <a href="mailto:weboutright@gmail.com" style="color: #2d7cff; text-decoration: underline;">
+      weboutright@gmail.com
+    </a>
+  `;
+
+  // Restore button
+  const submitBtn = document.getElementById('submit-btn');
+  submitBtn.textContent = 'Send Message';
+  submitBtn.disabled = false;
+}
+
+// Success handler
+function showSuccess() {
+  note.className = 'form-note success';
+  note.textContent = 'Thanks! Your message has been sent successfully. I will reach out shortly.';
+  form.reset();
+
+  // Restore button
+  const submitBtn = document.getElementById('submit-btn');
+  submitBtn.textContent = 'Send Message';
+  submitBtn.disabled = false;
 }
 
 // Floating back-to-top visibility after hero
