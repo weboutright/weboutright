@@ -366,10 +366,15 @@ body.menu-open{overflow:hidden}
 .to-top:hover{background:rgba(255,255,255,.08)}
 
 /* Floating Back-to-top button */
-.to-top-fab{position:fixed; right:18px; bottom:18px; width:44px; height:44px; border-radius:999px; display:grid; place-items:center; background:linear-gradient(180deg,#ff844d,#ff6b2d); color:#fff; font-weight:900; text-decoration:none; box-shadow:0 10px 24px rgba(0,0,0,.3); border:1px solid rgba(255,255,255,.24); opacity:0; transform:translateY(10px); pointer-events:none; transition:opacity .2s ease, transform .2s ease}
+.to-top-fab{position:fixed; right:18px; bottom:96px; width:44px; height:44px; border-radius:999px; display:grid; place-items:center; background:linear-gradient(180deg,#ff844d,#ff6b2d); color:#fff; font-weight:900; text-decoration:none; box-shadow:0 10px 24px rgba(0,0,0,.3); border:1px solid rgba(255,255,255,.24); opacity:0; transform:translateY(10px); pointer-events:none; transition:opacity .2s ease, transform .2s ease}
 .to-top-fab.show{opacity:1; transform:translateY(0); pointer-events:auto}
 .to-top-fab:hover{filter:brightness(1.05)}
 @media (prefers-reduced-motion:reduce){.to-top-fab{transition:none}}
+
+/* Add extra clearance on small screens */
+@media (max-width: 600px){
+  .to-top-fab{bottom:120px}
+}
 
 /* Mobile responsiveness improvements */
 @media (max-width: 600px){
