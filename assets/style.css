@@ -151,7 +151,7 @@ body.menu-open{overflow:hidden}
 /* Each line hugs its own text width and never wraps */
 .h1-line{display:inline-block; white-space:nowrap; word-break:keep-all}
 .h1-line.subtle{color:var(--muted); font-weight:700; letter-spacing:.03em; font-size:.88em}
-.hero h1 .text-brand{font-size:1.06em}
+.hero h1 .text-brand{font-size:1.06em; color:var(--brand)}
 /* Only force single line on wider screens to avoid mobile overflow */
 @media (min-width: 900px){
   .hero h1 .h1-line{white-space:nowrap}
@@ -395,7 +395,7 @@ body.menu-open{overflow:hidden}
   .hero h1{font-size:clamp(1.6rem, 7vw + 0.6rem, 2.1rem); letter-spacing:.01em}
   .h1-line{line-height:1.08}
   .h1-line.subtle{letter-spacing:.02em}
-  .hero h1 .text-brand{font-size:1em}
+  .hero h1 .text-brand{font-size:1em; color:var(--brand)}
   .hero .lead{font-size:1rem}
   .hero-art{display:none}
   .actions{gap:10px}
