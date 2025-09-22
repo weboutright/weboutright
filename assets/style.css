@@ -366,14 +366,15 @@ body.menu-open{overflow:hidden}
 .to-top:hover{background:rgba(255,255,255,.08)}
 
 /* Floating Back-to-top button */
-.to-top-fab{position:fixed; right:18px; bottom:96px; width:44px; height:44px; border-radius:999px; display:grid; place-items:center; background:linear-gradient(180deg,#ff844d,#ff6b2d); color:#fff; font-weight:900; text-decoration:none; box-shadow:0 10px 24px rgba(0,0,0,.3); border:1px solid rgba(255,255,255,.24); opacity:0; transform:translateY(10px); pointer-events:none; transition:opacity .2s ease, transform .2s ease}
-.to-top-fab.show{opacity:1; transform:translateY(0); pointer-events:auto}
-.to-top-fab:hover{filter:brightness(1.05)}
-@media (prefers-reduced-motion:reduce){.to-top-fab{transition:none}}
+.to-top-fab{position:fixed; right:24px; bottom:24px; width:52px; height:52px; border-radius:16px; display:grid; place-items:center; background:linear-gradient(135deg,#ff6b2d,#e55a1f); color:#fff; font-weight:900; font-size:18px; text-decoration:none; box-shadow:0 8px 25px rgba(255,107,45,.4), 0 3px 12px rgba(0,0,0,.15); border:none; opacity:0; transform:translateY(20px) scale(0.8); pointer-events:none; transition:all .3s cubic-bezier(0.4, 0, 0.2, 1); z-index:1000; backdrop-filter:blur(10px)}
+.to-top-fab.show{opacity:1; transform:translateY(0) scale(1); pointer-events:auto}
+.to-top-fab:hover{transform:translateY(-2px) scale(1.05); box-shadow:0 12px 35px rgba(255,107,45,.5), 0 6px 20px rgba(0,0,0,.2); background:linear-gradient(135deg,#ff844d,#ff6b2d)}
+.to-top-fab:active{transform:translateY(0) scale(0.95)}
+@media (prefers-reduced-motion:reduce){.to-top-fab{transition:opacity .2s ease}}
 
 /* Add extra clearance on small screens */
 @media (max-width: 600px){
-  .to-top-fab{bottom:120px}
+  .to-top-fab{right:20px; bottom:20px; width:48px; height:48px}
 }
 
 /* Mobile responsiveness improvements */
