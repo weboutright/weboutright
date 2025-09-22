@@ -164,3 +164,69 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 })();
+
+  // Privacy Policy modal functionality
+  const privacyModal = document.getElementById('privacy-modal');
+  const privacyLink = document.getElementById('privacy-link');
+  
+  if (privacyLink && privacyModal) {
+    privacyLink.addEventListener('click', function(e) {
+      e.preventDefault();
+      privacyModal.style.display = 'flex';
+      privacyModal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    });
+    
+    // Close privacy modal
+    privacyModal.addEventListener('click', function(e) {
+      if (e.target === privacyModal || e.target.classList.contains('modal-close')) {
+        privacyModal.style.display = 'none';
+        privacyModal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = 'auto';
+      }
+    });
+  }
+
+  // Terms of Service modal functionality
+  const termsModal = document.getElementById('terms-modal');
+  const termsLink = document.getElementById('terms-link');
+  
+  if (termsLink && termsModal) {
+    termsLink.addEventListener('click', function(e) {
+      e.preventDefault();
+      termsModal.style.display = 'flex';
+      termsModal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    });
+    
+    // Close terms modal
+    termsModal.addEventListener('click', function(e) {
+      if (e.target === termsModal || e.target.classList.contains('modal-close')) {
+        termsModal.style.display = 'none';
+        termsModal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = 'auto';
+      }
+    });
+  }
+
+  // Cookies modal functionality
+  const cookiesModal = document.getElementById('cookies-modal');
+  const cookiesLink = document.getElementById('cookies-link');
+  
+  if (cookiesLink && cookiesModal) {
+    cookiesLink.addEventListener('click', function(e) {
+      e.preventDefault();
+      cookiesModal.style.display = 'flex';
+      cookiesModal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    });
+    
+    // Close cookies modal
+    cookiesModal.addEventListener('click', function(e) {
+      if (e.target === cookiesModal || e.target.classList.contains('modal-close')) {
+        cookiesModal.style.display = 'none';
+        cookiesModal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = 'auto';
+      }
+    });
+  }
