@@ -11,6 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/style.css" />
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   <script defer src="assets/script.js"></script>
   
   <!-- Structured Data -->
@@ -324,11 +325,7 @@
             
             <button type="submit" class="btn btn-primary" id="submit-btn">Send Message</button>
             
-            <p class="form-note recaptcha-notice">
-              This site is protected by reCAPTCHA and the Google 
-              <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Privacy Policy</a> and 
-              <a href="https://policies.google.com/terms" target="_blank" rel="noopener">Terms of Service</a> apply.
-            </p>
+            <div class="g-recaptcha" data-sitekey="6LdEUM4rAAAAAIP5ReRsncx8zpbl-56yDSEAnQ3p"></div>
             
             <p class="form-note" id="form-note" role="status" aria-live="polite"></p>
           </form>
