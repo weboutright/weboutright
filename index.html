@@ -274,7 +274,8 @@
         </div>
         <div class="contact-form">
           <h2 class="section-title">Ready To Start Your Next Project?</h2>
-          <form id="inquiry-form" action="https://submit-form.com/2GKqoOcNb" method="POST" novalidate>
+          <form id="inquiry-form" action="https://submit-form.com/2GKqoOcNb" method="POST">
+            <input type="hidden" name="_redirect" value="https://weboutright.com.au/message-received.html">
             <div class="grid two sm-one">
               <label class="field">
                 <span>Full Name*</span>
@@ -304,7 +305,6 @@
                   <option>SHIFT</option>
                   <option>GROW</option>
                   <option>Other</option>
-
                 </select>
               </label>
               <label class="field">
@@ -320,11 +320,11 @@
             </div>
             <label class="field">
               <span>Project Details</span>
-              <textarea name="details" rows="5" placeholder="Tell me about your goals, timeline, and any must‑haves."></textarea>
+              <textarea name="message" rows="5" placeholder="Tell me about your goals, timeline, and any must‑haves."></textarea>
             </label>
             
-            <button type="submit" class="btn btn-primary" id="submit-btn">Send Message</button>
-            
+            <button type="submit" class="g-recaptcha btn btn-primary" id="submit-btn" data-sitekey="6LdEUM4rAAAAAIP5ReRsncx8zpbl-56yDSEAnQ3p" data-callback="onSubmit" data-size="invisible">Send Message</button>
+
             <p class="form-note" id="form-note" role="status" aria-live="polite"></p>
           </form>
         </div>

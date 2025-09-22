@@ -61,38 +61,29 @@ detailsList.forEach(d => {
 
 // Contact form with invisible reCAPTCHA (native submit)
 const form = document.getElementById('inquiry-form');
-let recaptchaWidget;
 
-// Initialize invisible reCAPTCHA
-window.onRecaptchaLoad = function () {
+// Invisible reCAPTCHA v2 button callback flow
+function onSubmit(token) {
+  const form = document.getElementById('inquiry-form');
   if (!form) return;
-  const recaptchaDiv = document.createElement('div');
-  recaptchaDiv.id = 'recaptcha-widget';
-  recaptchaDiv.style.display = 'none';
-  form.appendChild(recaptchaDiv);
-
-  recaptchaWidget = grecaptcha.render('recaptcha-widget', {
-    sitekey: '6LdEUM4rAAAAAIP5ReRsncx8zpbl-56yDSEAnQ3p',
-    callback: onRecaptchaSuccess,
-    size: 'invisible'
-  });
-};
-
-function ensureHidden(name, value) {
-  let input = form.querySelector(`input[name="${name}"]`);
-  if (!input) {
-    input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = name;
-    form.appendChild(input);
+  // ensure redirect field exists
+  let redirect = form.querySelector('input[name="_redirect"]');
+  if (!redirect) {
+    redirect = document.createElement('input');
+    redirect.type = 'hidden';
+    redirect.name = '_redirect';
+    redirect.value = 'https://weboutright.com.au/message-received.html';
+    form.appendChild(redirect);
   }
-  input.value = value;
-}
-
-function onRecaptchaSuccess(token) {
-  // Append token and redirect URL, then submit natively
-  ensureHidden('g-recaptcha-response', token);
-  ensureHidden('_redirect', '/message-received.html');
+  // ensure token field exists
+  let gr = form.querySelector('input[name="g-recaptcha-response"]');
+  if (!gr) {
+    gr = document.createElement('input');
+    gr.type = 'hidden';
+    gr.name = 'g-recaptcha-response';
+    form.appendChild(gr);
+  }
+  gr.value = token;
   form.submit();
 }
 
@@ -108,8 +99,8 @@ if (form) {
     }
 
     // Execute invisible reCAPTCHA then submit
-    if (typeof grecaptcha !== 'undefined' && recaptchaWidget !== undefined) {
-      grecaptcha.execute(recaptchaWidget);
+    if (typeof grecaptcha !== 'undefined') {
+      grecaptcha.execute();
     } else {
       // Fallback: submit without token
       ensureHidden('_redirect', '/message-received.html');
